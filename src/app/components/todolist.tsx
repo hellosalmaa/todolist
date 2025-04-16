@@ -16,7 +16,7 @@ type Task = {
   id: string;
   text: string;
   completed: boolean;
-  deadline: string;
+  deadline: string; 
 };
 
 export default function TodoList() {
@@ -63,7 +63,7 @@ export default function TodoList() {
 
   const addTask = async (): Promise<void> => {
     const { value: formValues } = await Swal.fire({
-      title: 'Tambah tugas baru 💕',
+      title: 'Tambah tugas baru 🎀',
       html:
         '<input id="swal-input1" class="swal2-input" placeholder="Nama tugas">' +
         '<input id="swal-input2" type="datetime-local" class="swal2-input">',
@@ -130,12 +130,34 @@ export default function TodoList() {
           task.id === id ? { ...task, ...updatedTask } : task
         )
       );
+
+      // ✅ Notifikasi berhasil edit
+      Swal.fire({
+        icon: 'success',
+        title: 'Tugas berhasil diubah!',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
     }
   };
 
   const deleteTask = async (id: string): Promise<void> => {
     await deleteDoc(doc(db, 'tasks', id));
     setTasks(tasks.filter((task) => task.id !== id));
+
+    // 🗑️ Notifikasi berhasil hapus
+    Swal.fire({
+      icon: 'success',
+      title: 'Tugas berhasil dihapus!',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+    });
   };
 
   return (
@@ -176,7 +198,6 @@ export default function TodoList() {
               >
                 <div className="flex justify-between items-start">
                   <div className="flex items-start gap-3">
-                    {/* 🌸 Animated Emoji Toggle */}
                     <motion.span
                       onClick={() => toggleTask(task.id)}
                       className="cursor-pointer text-2xl select-none"
@@ -186,7 +207,6 @@ export default function TodoList() {
                       {task.completed ? '🌸' : '🪻'}
                     </motion.span>
 
-                    {/* 📝 Task Text */}
                     <span
                       onClick={() => toggleTask(task.id)}
                       className={`text-lg cursor-pointer ${
@@ -222,7 +242,6 @@ export default function TodoList() {
                   ⏳ {timeRemaining[task.id] || 'Menghitung...'}
                 </p>
               </motion.li>
-
             );
           })}
         </AnimatePresence>
